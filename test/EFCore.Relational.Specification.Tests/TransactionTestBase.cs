@@ -48,7 +48,11 @@ namespace Microsoft.EntityFrameworkCore
                         Id = 77,
                         Name = "Bobble"
                     });
-                context.Entry(context.Set<TransactionCustomer>().Last()).State = EntityState.Added;
+
+                
+                // Issue #14935. Cannot eval 'Last()'
+                // Added AsEnumerable()
+                context.Entry(context.Set<TransactionCustomer>().AsEnumerable().Last()).State = EntityState.Added;
 
                 Assert.Throws<DbUpdateException>(() => context.SaveChanges());
 
